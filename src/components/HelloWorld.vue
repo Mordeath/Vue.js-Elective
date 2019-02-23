@@ -2,21 +2,23 @@
 <template>
   <div>
     <h1
-      class="text-xs-center nyt"
+      class="text-xs-center"
       style="font-size: 50px; margin-top: 20px; margin-bottom: 10px"
     >
       Search Articles
     </h1>
-    <v-form>
+    <v-form v-on:submit.prevent="onSubmit">
       <div style="margin: 0 auto; text-align: center; margin-bottom: 50px">
         <div style="margin-bottom: 40px; margin: 0 auto;">
           <v-text-field
+            v-on:click="clear"
+            v-model="search"
             class="mx-1"
             flat
             label="Search Articles"
-            @input="searchArticles"
             prepend-inner-icon="search"
           ></v-text-field>
+          <v-btn v-on:click="searchArticles(search)">Search</v-btn>
         </div>
       </div>
     </v-form>
@@ -67,6 +69,9 @@
         </v-layout>
       </v-flex>
     </v-layout>
+    <h2 style="text-align: cente" v-if="!isHidden">
+      No articles foud for "{{ search }}"!
+    </h2>
   </div>
 </template>
 
@@ -76,11 +81,10 @@ import key from "./api/nyt_api";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import dateFormat from "dateformat";
-//import Switches from "vue-switches";
 
 export default {
   mounted() {
-    this.search = "home";
+    this.search = "Home";
     this.fetchArticles(this.search);
   },
 
@@ -92,6 +96,10 @@ export default {
     setTarget: function() {
       return this.enabled ? "_blank" : "_self";
     },
+    clear: function() {
+      this.search = "";
+    },
+
     searchArticles: function(q) {
       this.search = q;
       this.loading = true;
@@ -111,6 +119,10 @@ export default {
           console.log(response);
           vm.loading = false;
           vm.results = response.data.response.docs;
+          if (vm.results.length == 0) {
+            console.log("Няма никой вкъщи!");
+            vm.isHidden = false;
+          }
           vm.processPosts();
         })
         .catch(function(error) {
@@ -134,11 +146,7 @@ export default {
       console.log(this.results);
     }
   },
-  computed: {
-    myApiKey: function() {
-      return process.env.API_KEY;
-    }
-  },
+  computed: {},
   components: {
     PulseLoader
   },
@@ -149,6 +157,7 @@ export default {
       errors: false,
       search: String,
       enabled: true,
+      isHidden: true,
       lastUpdated: null,
       results: []
     };

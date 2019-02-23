@@ -65,9 +65,9 @@
                   </div>
 
                   <div style="margin-bottom: 50px">
-                    <span class="grey--text">
-                      {{ makeFriendlyDate(result.published_date) }}
-                    </span>
+                    <span class="grey--text">{{
+                      makeFriendlyDate(result.published_date)
+                    }}</span>
                   </div>
                 </div>
               </v-card-title>
@@ -85,7 +85,6 @@ import key from "./api/nyt_api";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import dateFormat from "dateformat";
-//import Switches from "vue-switches";
 
 export default {
   mounted() {
@@ -133,7 +132,6 @@ export default {
     },
     processPosts: function() {
       let posts = this.results;
-      // Add extra attributes: image URL and uuids for the keys.
       posts.map(post => {
         let imgObj = post.multimedia.find(
           media => media.format === "superJumbo"
@@ -146,11 +144,7 @@ export default {
       this.results = posts;
     }
   },
-  computed: {
-    myApiKey: function() {
-      return process.api.apiKey;
-    }
-  },
+  computed: {},
   components: {
     PulseLoader
   },

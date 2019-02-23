@@ -30,6 +30,8 @@
       style="width: 350px; font-size: 20px; color: #555; margin: 0 auto;"
       class="nyt"
     ></v-autocomplete>
+
+    <h3 style="margin-top: 6%">Faculti Number: 1801737013</h3>
   </div>
 </template>
 
